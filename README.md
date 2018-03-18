@@ -10,10 +10,10 @@
   - You need to generate a MyToken API key according [your exchange information](#exchange-information)(* is the required field)
 
   - Use the exchange information to run the following code:
+    ```
+    $ php script/GenerateMtApikey.php --name="yourexhcange" --website="https://www.yourexchange.io" --contact="your contact" --description="your exchange description" --logo_url="your logo url"
+    ```
 
-```
-$ php script/GenerateMtApikey.php --name="yourexhcange" --website="https://www.yourexchange.io" --contact="your contact" --description="your exchange description" --logo_url="your logo url"
-```
   - You can see the configuration from 'conf/app.ini', the section key is the lower case of exchange name, the 'mt_api_key' value is the MyToken APP key.
 
 - Step 2: Coding APIs for a specific exchange
