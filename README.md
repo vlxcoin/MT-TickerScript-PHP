@@ -7,7 +7,7 @@
 ## Coding
 
 - Step 1: Generate MyToken API key(mt_api_key) and Initialize the configuration file
-  - You need to generate a MyToken API key according [your docking exchange](###Your Exchange Information)(* is the required field)
+  - You need to generate a MyToken API key according [your docking exchange](#exchange-information)(* is the required field)
 
   - Use the exchange information to run the following code:
 
@@ -24,8 +24,9 @@ $ php script/GenerateMtApikey.php --name="yourexhcange" --website="https://www.y
 
 - Step 4: Commit your code
   - Submit(commit && push) code based on your branch
-  - Create a Pull Request from your branch to branch "dev", you must leave a commit about [your exchange information](###Your Exchange Information)
+  - Create a Pull Request from your branch to branch "dev", you must leave a commit about [your exchange information](#exchange-information)
   
+<a name="exchange-information"></a><a name="2.1"></a>  
 ### Your Exchange Information
 ```
 name(*): yourexhcange
