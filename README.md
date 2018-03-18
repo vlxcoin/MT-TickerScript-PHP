@@ -7,7 +7,7 @@
 ## Coding
 
 - Step 1: Generate MyToken API key(mt_api_key) and Initialize the configuration file
-  - You need to generate a MyToken API key according [your docking exchange](#exchange-information)(* is the required field)
+  - You need to generate a MyToken API key according [your exchange information](#exchange-information)(* is the required field)
 
   - Use the exchange information to run the following code:
 
