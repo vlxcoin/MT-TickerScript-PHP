@@ -32,7 +32,7 @@ class TokenUpdateCommand
                 'unique_key'=> $tokenInfo['id'],
             ];
             $res            = $tokenModel->create($data);
-            if (isset($res['code']) && isset($res['message']) ) {
+            if (isset($res['code']) && isset($res['message'])) {
                 echo sprintf("create token failed. Data: %s, Code: %s, Message: %s\n", json_encode($data), $res['code'], $res['message']);
             }
         }

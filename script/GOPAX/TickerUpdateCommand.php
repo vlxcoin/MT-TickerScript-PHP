@@ -46,7 +46,7 @@ class TickerUpdateCommand
                 'volume_anchor_24h' => $tradingPairInfo['volume'] * $tradingPairInfo['price'],
             ];
             $res            = $tickerModel->create($data);
-            if (isset($res['code']) && isset($res['message']) ) {
+            if (isset($res['code']) && isset($res['message'])) {
                 echo sprintf("update ticker failed. Data: %s, Code: %s, Message: %s\n", json_encode($data), $res['code'], $res['message']);
             }
         }

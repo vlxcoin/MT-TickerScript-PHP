@@ -22,7 +22,7 @@ class API
         return base64_encode($hmac);
     }
 
-    protected static function call($path, $data = [], $method = 'GET', $needAuth = false)
+    protected static function call($path, $data = [], $method = 'get', $needAuth = false)
     {
         // No authorization required generally, it's just a try out.
         if ($needAuth) {
@@ -123,5 +123,24 @@ class API
     {
         $path       = sprintf("/trading-pairs/%s/ticker", $tradingPairName);
         return self::call($path);
+    }
+
+    public static function getBatchTickerPairs($tradingPairNameList)
+    {
+        $requests       = [];
+
+        foreach ($tradingPairNameList as $tradingPairName) {
+            $path       = sprintf("/trading-pairs/%s/ticker", $tradingPairName);
+            $requests[] = [
+                'host'      => self::API_HOST,
+                'url'       => $path,
+                'method'    => 'get',
+                'data'      => [],
+                'key'       => $tradingPairName,
+            ];
+        }
+
+        $response       = Http::multiRequest($requests);
+        return $response;
     }
 }

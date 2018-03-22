@@ -21,6 +21,7 @@
 
 - Step 3: Coding scripts for a specific exchange
   - You can refer to the following directory "script/GOPAX"
+  - It's recommended to update the prices in batch, because it's more efficient.
 
 - Step 4: Commit your code
   - Submit(commit && push) code based on your branch

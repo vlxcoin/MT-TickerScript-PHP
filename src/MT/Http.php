@@ -14,18 +14,12 @@ class Http
     {
     }
 
-    static function getApiServer($env)
+    private static function getApiServer($env)
     {
         return $env == self::API_ENV_DEV ? Config::API_HOST_DEV : Config::API_HOST_PROD;
     }
 
-    static function callback($data, $delay)
-    {
-        usleep($delay);
-        return $data;
-    }
-
-    public static function PackageGetRequest( &$ch, $request, $timeOut = 10 )
+    protected static function PackageGetRequest( &$ch, $request, $timeOut = 10 )
     {
         $path            = http_build_query( $request['data'] );
 
@@ -45,7 +39,7 @@ class Http
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
     }
 
-    static function PackagePostRequest( &$ch, $request ){
+    protected static function PackagePostRequest( &$ch, $request ){
         $url             = $request['host'];
 
         $headers         = [
@@ -80,7 +74,7 @@ class Http
         return $this->responses;
     }
 
-    static function request($request, $exchangeSubject = "", $timeOut = 10){
+    public static function request($request, $exchangeSubject = "", $timeOut = 10){
         if ($exchangeSubject) {
             $config         = Config::getConfig();
             if (!isset($config[$exchangeSubject]['api_key'])) {
@@ -127,5 +121,68 @@ class Http
         curl_close( $ch );
 
         return $result;
+    }
+
+    public static function multiRequest($requests) {
+
+        $queue                   = curl_multi_init();
+        $map                     = array();
+
+        foreach ($requests as $reqId => $request) {
+
+            if( false == isset( $request['data'] ) || false == is_array( $request['data'] ) ){
+                $request['data'] = array();
+            }
+            $ch                  = curl_init();
+            switch ( $request['method'] ) {
+                case 'get':
+                case 'GET':
+                    self::PackageGetRequest( $ch, $request );
+                    break;
+                case 'post':
+                case 'POST':
+                    self::PackagePostRequest( $ch, $request );
+                    break;
+                default: break;
+            }
+            curl_multi_add_handle($queue, $ch);
+            $map[(string) $ch] = $request['key'];
+        }
+
+        $responses        = array();
+
+        do {
+            while (($code = curl_multi_exec($queue, $active)) == CURLM_CALL_MULTI_PERFORM) ;
+
+            if ($code != CURLM_OK) { break; }
+
+            // a request was just completed -- find out which one
+            while ($done  = curl_multi_info_read($queue)) {
+
+                // get the info and content returned on the request
+                $info     = curl_getinfo($done['handle']);
+                $error    = curl_error($done['handle']);
+                $results  = curl_multi_getcontent($done['handle']);
+
+                if( empty( $error ) ){
+                    $responses[$map[(string) $done['handle']]] = json_decode( $results, true );
+                } else {
+                    $responses[$map[(string) $done['handle']]] = compact('info', 'error', 'results');
+                }
+                // remove the curl handle that just completed
+                curl_multi_remove_handle($queue, $done['handle']);
+                curl_close($done['handle']);
+            }
+
+            // Block for data in / output; error handling is done by curl_multi_exec
+            if ($active > 0) {
+                curl_multi_select($queue, 0.5);
+            }
+
+        } while ($active);
+
+        curl_multi_close($queue);
+
+        return $responses;
     }
 }
