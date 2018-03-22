@@ -10,11 +10,11 @@
 + conf
   | - app.ini       // Configure 
 - examples      // call MyToken API test script
-- script/       // exchange timed script
++ script/       // exchange timed script
   - GenerateMtApikey.php        // Generate MyToken API key script
 + src/
-  + MT/     // MyToken API and tool class(config, error_code, http)
-  + ThirdParty/     //ThirdParty exchange API
+  - MT     // MyToken API and tool class(config, error_code, http)
+  - ThirdParty     //ThirdParty exchange API
 ```
 
 ## Coding
