@@ -4,6 +4,19 @@
 
 #### PHP 5 >= 5.3.0, PHP 7(PHP Command Line)
 
+## Layout
+```
+- autoload.php      // Autoload index file
++ conf
+  | - app.ini       // Configure 
+- examples      // call MyToken API test script
+- script/       // exchange timed script
+  - GenerateMtApikey.php        // Generate MyToken API key script
++ src/
+  + MT/     // MyToken API and tool class(config, error_code, http)
+  + ThirdParty/     //ThirdParty exchange API
+```
+
 ## Coding
 
 - Step 1: Generate MyToken API key(mt_api_key) and Initialize the configuration file
