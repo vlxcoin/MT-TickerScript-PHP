@@ -53,28 +53,27 @@ class API
         return $response;
     }
 
-    protected static function arrayDiffAssocRecursive($array1,$array2)
+    protected static function getDiffTokens($data, $srcData, $symbolKey = 'id')
     {
-        $diffArray      = array();
-        foreach ($array1 as $key => $value) {
-            if (is_array($value)) {
-                if (!isset($array2[$key])) {
-                    $diffArray[$key]    = $value;
-                } else if (!is_array($array2[$key])) {
-                    $diffArray[$key]    = $value;
-                }else{
-                    $diff               = self::arrayDiffAssocRecursive($value, $array2[$key]);
-                    if ($diff != false) {
-                        $diffArray[$key]= $diff;
-                    }
-                }
-            } else if (!array_key_exists($key, $array2) || $value !== $array2[$key]) {
-                $diffArray[$key]        = $value;
-            }
+        $newData        = [];
+        foreach ($data as $value) {
+            $newData[]  = $value[$symbolKey];
         }
-        return $diffArray;
+
+        return array_diff($newData, $srcData);
     }
 
+    protected static function putTokens($fileName, $data, $symbolKey = 'id')
+    {
+        $newData        = [];
+        foreach ($data as $value) {
+            $newData[]  = $value[$symbolKey];
+        }
+
+        file_put_contents($fileName, json_encode($newData));
+    }
+
+    // return new data from file cache, the gopax exchange symbol key is 'id'
     protected static function returnNewDataFromFile($subject, $data)
     {
         $fileDir        = APP_PATH . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . str_replace("\\", "_", __NAMESPACE__);
@@ -86,11 +85,18 @@ class API
         if (file_exists($fileName)) {
             $srcContent = file_get_contents($fileName);
             $srcData    = json_decode($srcContent, true);
-            $results    = self::arrayDiffAssocRecursive($data, $srcData);
+            $diffTokens = self::getDiffTokens($data, $srcData);
+            $results    = [];
+            foreach ($data as $key => $value) {
+                $tokenSymbol    = $value['id'];
+                if (in_array($tokenSymbol, $diffTokens)) {
+                    $results[]  = $value;
+                }
+            }
         } else {
             $results    = $data;
         }
-        file_put_contents($fileName, json_encode($data));
+        self::putTokens($fileName, $data);
 
         return $results;
     }
