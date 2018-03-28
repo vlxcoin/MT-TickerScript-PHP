@@ -88,9 +88,6 @@ class Http
                 $request['header']  = isset($request['header']) ? array_merge($request['header'], $mtApiKeyHeader) : [$mtApiKeyHeader];
             }
         }
-        if (!isset($request['host'])) {
-            $request['host']        = self::getApiServer(self::API_ENV_DEV);
-        }
 
         $request['method']  = isset($request['method']) ? $request['method'] : 'get';
 

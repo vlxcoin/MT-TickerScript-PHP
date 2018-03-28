@@ -29,12 +29,13 @@
 
   - You can see the configuration from 'conf/app.ini', the section key is the lower case of exchange name, the 'mt_api_key' value is the MyToken APP key.
 
-- Step 2: Coding APIs for a specific exchange
+- Step 2: Coding APIs for a specific exchange, within the directory of "src/ThirdParty/"
   - You can refer to the following directory "src/ThirdParty/GOPAX"
 
-- Step 3: Coding scripts for a specific exchange
+- Step 3: Coding scripts for a specific exchange, within the directory of "script/"
   - You can refer to the following directory "script/GOPAX"
-  - It's recommended to update the prices in batch, because it's more efficient.
+  - You must code `TokenUpdateCommand.php`, `TickerUpdateCommand.php`
+  - It's recommended to update the prices in batch, like `TickerBatchUpdateCommand.php`, because it's more efficient.
 
 - Step 4: Commit your code
   - Submit(commit && push) code based on your branch

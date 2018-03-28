@@ -12,13 +12,15 @@ use \MT\API\TokenModel;
 
 class TokenUpdateCommand
 {
+    // GOPAX API call limit => 20 times per 1 second
+
     public function update()
     {
         $uniqueId           = uniqid();
         echo sprintf("Start updating gopax token[%s]! Time: %s\n", $uniqueId, time());
 
         $gopaxTokenList    = GOPAX_API::getAssets(true);
-        if (!is_array($gopaxTokenList)) {
+        if (isset($gopaxTokenList['code']) && isset($gopaxTokenList['message'])) {
             echo sprintf("get gopaxTokenList failed. File: %s Line: %s\n", __FILE__, __LINE__);
             return ;
         }

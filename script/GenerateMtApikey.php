@@ -10,6 +10,7 @@ require_once __DIR__ . '/../autoload.php';
 
 use \MT\API\ExchangeModel;
 use \MT\Config;
+use \MT\Http;
 
 class GenerateMtApikeyCommand
 {
@@ -34,7 +35,11 @@ class GenerateMtApikeyCommand
 
     public function generate($params)
     {
-        $exchangeModel  = new ExchangeModel();
+        $exchangeSubject    = "";
+        if (isset($params['env']) && $params['env'] == Http::API_ENV_PROD) {
+            $exchangeSubject= $params['name'];
+        }
+        $exchangeModel  = new ExchangeModel($exchangeSubject);
 
         $res            = $exchangeModel->create($params);
         if (isset($res['code']) && isset($res['message']) ) {
@@ -54,8 +59,9 @@ $longOpts   = [
     "contact:",
     "description::",
     "logo_url::",
+    "env::"
 ];
-//todo
+
 $options = getopt("", $longOpts);
 if (!isset($options['name']) || !isset($options['website']) || !isset($options['contact'])) {
     echo "name, website, contact is required!\n";

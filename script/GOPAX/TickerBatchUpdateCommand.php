@@ -21,14 +21,13 @@ class TickerBatchUpdateCommand
         echo sprintf("Start batch updating gopax ticker[%s]! Time: %s\n", $uniqueId, time());
 
         $gopaxTokenList     = GOPAX_API::getAssets();
-        if (empty($gopaxTokenList) || !is_array($gopaxTokenList)) {
+        if (isset($gopaxTokenList['code']) && isset($gopaxTokenList['message'])) {
             echo sprintf("get gopaxTokenList failed. File: %s Line: %s\n", __FILE__, __LINE__);
             return ;
         }
 
         $gopaxTradingList   = GOPAX_API::getTradingPairs();
-
-        if (empty($gopaxTradingList) || !is_array($gopaxTradingList)) {
+        if (isset($gopaxTradingList['code']) && isset($gopaxTradingList['message'])) {
             echo sprintf("get gopaxTradingList failed. File: %s Line: %s\n", __FILE__, __LINE__);
             return ;
         }

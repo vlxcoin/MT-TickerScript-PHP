@@ -12,19 +12,21 @@ use \MT\API\TickerModel;
 
 class TickerUpdateCommand
 {
+    // GOPAX API call limit => 20 times per 1 second
+
     public function update()
     {
         $uniqueId           = uniqid();
         echo sprintf("Start updating gopax ticker[%s]! Time: %s\n", $uniqueId, time());
 
         $gopaxTokenList     = GOPAX_API::getAssets();
-        if (empty($gopaxTokenList) || !is_array($gopaxTokenList)) {
+        if (isset($gopaxTokenList['code']) && isset($gopaxTokenList['message'])) {
             echo sprintf("get gopaxTokenList failed. File: %s Line: %s\n", __FILE__, __LINE__);
             return ;
         }
 
         $gopaxTradingList   = GOPAX_API::getTradingPairs();
-        if (empty($gopaxTradingList) || !is_array($gopaxTradingList)) {
+        if (isset($gopaxTradingList['code']) && isset($gopaxTradingList['message'])) {
             echo sprintf("get gopaxTradingList failed. File: %s Line: %s\n", __FILE__, __LINE__);
             return ;
         }
@@ -34,6 +36,7 @@ class TickerUpdateCommand
         // exchange name[the section key] from conf/app.ini
         $tickerModel        = new TickerModel('gopax');
         foreach ($gopaxTradingList as $tickerInfo) {
+            sleep(1);
             $tradingPairInfo = GOPAX_API::getTickerPairs($tickerInfo['name']);
             $data           = [
                 'symbol_key'        => $tickerInfo['baseAsset'],

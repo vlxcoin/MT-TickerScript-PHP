@@ -36,6 +36,7 @@ final class ErrorCode
 
     public static function returnError($errorCode)
     {
+        $errorCode  = isset(self::$ERROR_MSG[$errorCode]) ? $errorCode : self::UNKNOWN_ERROR;
         $errMsg     = isset(self::$ERROR_MSG[$errorCode]) ? self::$ERROR_MSG[$errorCode] : self::$ERROR_MSG[self::UNKNOWN_ERROR];
 
         return [
