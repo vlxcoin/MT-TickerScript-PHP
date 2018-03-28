@@ -4,6 +4,8 @@
 
 #### PHP 5 >= 5.3.0, PHP 7(PHP Command Line)
 
+#### Your exchange must have your own open API
+
 ## Layout
 ```
 - autoload.php      // Autoload index file
