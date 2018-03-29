@@ -1,5 +1,7 @@
 # MyToken ticker script[PHP]
 
+The connection between exchange open API and MyToken open API. 
+
 ## Requirements
 
 #### PHP 5 >= 5.3.0, PHP 7(PHP Command Line)
