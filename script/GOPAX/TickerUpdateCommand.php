@@ -21,13 +21,15 @@ class TickerUpdateCommand
 
         $gopaxTokenList     = GOPAX_API::getAssets();
         if (isset($gopaxTokenList['code']) && isset($gopaxTokenList['message'])) {
-            echo sprintf("get gopaxTokenList failed. File: %s Line: %s\n", __FILE__, __LINE__);
+            echo sprintf("get gopaxTokenList failed. Code: %s, Message: %s, File: %s, Line: %s\n",
+                $gopaxTokenList['code'], $gopaxTokenList['message'], __FILE__, __LINE__);
             return ;
         }
 
         $gopaxTradingList   = GOPAX_API::getTradingPairs();
         if (isset($gopaxTradingList['code']) && isset($gopaxTradingList['message'])) {
-            echo sprintf("get gopaxTradingList failed. File: %s Line: %s\n", __FILE__, __LINE__);
+            echo sprintf("get gopaxTradingList failed. Code: %s, Message: %s, File: %s, Line: %s\n",
+                $gopaxTradingList['code'], $gopaxTradingList['message'], __FILE__, __LINE__);
             return ;
         }
 

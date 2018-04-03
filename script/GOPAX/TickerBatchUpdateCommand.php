@@ -13,7 +13,7 @@ use \MT\API\TickerModel;
 class TickerBatchUpdateCommand
 {
     // GOPAX API call limit => 20 times per 1 second
-    const BATCH_CALL_LIMIT_SIZE  = 20;
+    const BATCH_CALL_LIMIT_SIZE  = 15;
 
     public function update()
     {
@@ -22,13 +22,15 @@ class TickerBatchUpdateCommand
 
         $gopaxTokenList     = GOPAX_API::getAssets();
         if (isset($gopaxTokenList['code']) && isset($gopaxTokenList['message'])) {
-            echo sprintf("get gopaxTokenList failed. File: %s Line: %s\n", __FILE__, __LINE__);
+            echo sprintf("get gopaxTokenList failed. Code: %s, Message: %s, File: %s, Line: %s\n",
+                $gopaxTokenList['code'], $gopaxTokenList['message'], __FILE__, __LINE__);
             return ;
         }
 
         $gopaxTradingList   = GOPAX_API::getTradingPairs();
         if (isset($gopaxTradingList['code']) && isset($gopaxTradingList['message'])) {
-            echo sprintf("get gopaxTradingList failed. File: %s Line: %s\n", __FILE__, __LINE__);
+            echo sprintf("get gopaxTradingList failed. Code: %s, Message: %s, File: %s, Line: %s\n",
+                $gopaxTradingList['code'], $gopaxTradingList['message'], __FILE__, __LINE__);
             return ;
         }
 
@@ -42,6 +44,11 @@ class TickerBatchUpdateCommand
         foreach ($tickerPairNameChunkList as $tickerPairNameList) {
             sleep(1);
             $tickerPairList         = GOPAX_API::getBatchTickerPairs($tickerPairNameList);
+            if (isset($tickerPairList['code']) && isset($tickerPairList['message'])) {
+                echo sprintf("get gopaxTradingPairList failed. Code: %s, Message: %s, File: %s, Line: %s\n",
+                    $tickerPairList['code'], $tickerPairList['message'], __FILE__, __LINE__);
+                continue;
+            }
             $data                   = [];
             foreach ($tickerPairList as $tickerPairName => $tickerPriceInfo) {
                 $tickerPairInfo     = $tickerPairHash[$tickerPairName];
