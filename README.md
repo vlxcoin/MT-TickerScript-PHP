@@ -48,9 +48,9 @@ The connection between exchange open API and MyToken open API.
 <a name="exchange-information"></a><a name="2.1"></a>  
 ### Your Exchange Information
 ```
-name(*): yourexhcange
-website(*): https://www.yourexchange.io
-contact(*): 8615266666666
-description: this is description
-logo_url: http://p1nzzscwm.bkt.clouddn.com/bittrex_logo.png
+name(*): veloxexchange
+website(*): https://vlxexchange.com
+contact(*): telegram: veloxcoin, email: support@vlxexchange.com
+description: VeloxCoin [VLX] Exchange
+logo_url: https://veloxproject.io/img/vlx.png
 ```  
