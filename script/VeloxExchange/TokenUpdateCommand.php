@@ -17,19 +17,18 @@ class TokenUpdateCommand
         $uniqueId           = uniqid();
         echo sprintf("Start updating veloxexchange token[%s]! Time: %s\n", $uniqueId, time());
 
-        $veMarketList    = VELOXEXCHANGE_API::getMarkets(true);
-        if (isset($veMarketList['code']) && isset($veMarketList['message'])) {
-            echo sprintf("get veMarketList failed. File: %s Line: %s\n", __FILE__, __LINE__);
+        $veTokenList        = VELOXEXCHANGE_API::getTokens(true);
+        if (isset($veTokenList['code']) && isset($veTokenList['message'])) {
+            echo sprintf("get veTokenList failed. File: %s Line: %s\n", __FILE__, __LINE__);
             return ;
         }
-        $activeTokens = getActiveTokens($veMarketList['markets']);
 
         // exchange name[the section key] from conf/app.ini
         $tokenModel         = new TokenModel('veloxexchange');
-        foreach ($activeTokens as $key => $name) {
+        foreach ($veTokenList['tokens'] as $key => $value) {
             $data           = [
                 'symbol'    => $key,
-                'name'      => $name,
+                'name'      => $value['name_en'],
                 'unique_key'=> $key,
             ];
             $res            = $tokenModel->create($data);

@@ -18,6 +18,12 @@ class TickerBatchUpdateCommand
         $uniqueId           = uniqid();
         echo sprintf("Start batch updating veloxexchange ticker[%s]! Time: %s\n", $uniqueId, time());
 
+        $veTokenList        = VELOXEXCHANGE_API::getTokens(true);
+        if (isset($veTokenList['code']) && isset($veTokenList['message'])) {
+            echo sprintf("get veTokenList failed. File: %s Line: %s\n", __FILE__, __LINE__);
+            return ;
+        }
+
         $veStatsList   = VELOXEXCHANGE_API::getStats();
         if (isset($veStatsList['code']) && isset($veStatsList['message'])) {
             echo sprintf("get veStatsList failed. Code: %s, Message: %s, File: %s, Line: %s\n",
@@ -25,7 +31,6 @@ class TickerBatchUpdateCommand
             return ;
         }
 
-        $tokenNames    = getTokenNames();
         $tickerPairHash             = $veStatsList['stats'];
         $tickerPairNameList         = array_keys($veStatsList['stats']);
         $tickerPairNameChunkList    = array_chunk($tickerPairNameList, self::BATCH_CALL_LIMIT_SIZE);
@@ -45,9 +50,9 @@ class TickerBatchUpdateCommand
                 $tickerPairInfo     = $tickerPairHash[$tickerPairName];
                 $data[]             = [
                     'symbol_key'        => $tickerPairInfo['market'],
-                    'symbol_name'       => $tokenNames[$tickerPairInfo['market']],
+                    'symbol_name'       => $veTokenList['tokens'][$tickerPairInfo['market']]['name_en'],
                     'anchor_key'        => $tickerPairInfo['currency'],
-                    'anchor_name'       => $tokenNames[$tickerPairInfo['currency']],
+                    'anchor_name'       => $veTokenList['tokens'][$tickerPairInfo['currency']]['name_en'],
                     'price'             => $tickerPriceInfo['last_price'],
                     'price_updated_at'  => gmdate('Y-m-d H:i:s O', $transactionsInfo['transactions'][0]['timestamp']),
                     'volume_24h'        => $tickerPairInfo['pair_volume_self'],

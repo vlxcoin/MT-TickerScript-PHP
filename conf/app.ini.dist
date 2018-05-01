@@ -1,5 +1,5 @@
-[veloxexchange]
+[exchange name]
 mt_api_key = "MyToken api key"
-env = "prod"
-api_key = ""
-secret = ""
+env = "dev"
+api_key = "api key"
+secret = "secret"

@@ -27,12 +27,12 @@ class API
         return $response;
     }
 
-    protected static function getDiffMarkets($data, $srcData)
+    protected static function getDiffData($data, $srcData)
     {
         return array_diff_key($data, $srcData);
     }
 
-    protected static function putMarkets($fileName, $data)
+    protected static function putData($fileName, $data)
     {
         file_put_contents($fileName, json_encode($data));
     }
@@ -52,41 +52,31 @@ class API
         if (file_exists($fileName)) {
             $srcContent = file_get_contents($fileName);
             $srcData    = json_decode($srcContent, true);
-            $diffMarkets = self::getDiffMarkets($data, $srcData);
+            $diffData = self::getDiffData($data, $srcData);
             $results    = [];
             foreach ($data as $key => $value) {
-                if (isset($diffMarkets[$key])) {
+                if (isset($diffData[$key])) {
                     $results[$key]  = $value;
                 }
             }
         } else {
             $results    = $data;
         }
-        self::putMarkets($fileName, $data);
+        self::putData($fileName, $data);
 
         return $results;
     }
-
-    public static function getTokenNames()
+    
+    public static function getTokens($returnNew = false)
     {
-        return array(
-            'VLX' => 'Velox',
-            'BTC' => 'Bitcoin',
-            'LTC' => 'Litecoin',
-            'DOGE' => 'Dogecoin',
-            'DASH' => 'Dash'
-        );
-    }
+        $path       = '/tokens';
+        $result     = self::call($path);
 
-    public static function getActiveTokens($markets)
-    {
-        $allTokenNames = self::getTokenNames();
-        $activeTokenNames = array();
-        foreach ($markets as $key => $data) {
-            if (isset($allTokenNames[$data['market']]) && !isset($activeTokenNames[$data['market']])) $activeTokenNames[$data['market']] = $allTokenNames[$data['market']];
-            if (isset($allTokenNames[$data['currency']]) && !isset($activeTokenNames[$data['currency']])) $activeTokenNames[$data['currency']] = $allTokenNames[$data['currency']];
+        if ($returnNew && $result) {
+            return self::returnNewDataFromFile('tokens', $result);
         }
-        return $activeTokenNames;
+
+        return $result;
     }
 
     public static function getMarkets($returnNew = false)
