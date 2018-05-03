@@ -93,7 +93,7 @@ class API
 
     public static function getStats($returnNew = false)
     {
-        $path       = '/stats';
+        $path       = '/stats?market=ALL&currency=ALL';
         $result     = self::call($path);
 
         if ($returnNew && $result) {
